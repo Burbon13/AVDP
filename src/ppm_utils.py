@@ -1,4 +1,5 @@
 from src.domain import RGBImage, RGBPixel
+from random import random
 
 
 def read_ppm_file(file_name):
@@ -116,3 +117,15 @@ def write_ppm_yuv_cr_file(file_name, image):
             write_file.write(str(pixel.v) + '\n')
             write_file.write(str(pixel.v) + '\n')
             write_file.write(str(pixel.v) + '\n')
+
+
+def generate_random_ppd(file_name, x_size, y_size):
+    with open(file_name, 'w+') as write_file:
+        write_file.write('P3\n')
+        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
+        write_file.write(str(x_size) + ' ' + str(y_size) + '\n')
+        write_file.write('255\n')
+        for _ in range(x_size * y_size):
+            write_file.write(str(int(random() * 255)) + '\n')
+            write_file.write(str(int(random() * 255)) + '\n')
+            write_file.write(str(int(random() * 255)) + '\n')
