@@ -2,20 +2,27 @@ from src.ppm_utils import *
 
 file_name = '../res/images/nt-P3.ppm'
 
-generate_random_ppd('../res/images/rand.ppm', 800, 600)
+# generate_random_ppd('../res/images/rand.ppm', 1920, 1080)
 
-# ppm_image = read_ppm_file(file_name)
-ppm_image = read_ppm_file('../res/images/rand.ppm')
+rgb_image = read_ppm_file(file_name)
 
-write_ppm_rgb_file('../res/images/new.ppm', ppm_image)
-write_ppm_rgb_only_blue_file('../res/images/new_blue.ppm', ppm_image)
-write_ppm_rgb_only_green_file('../res/images/new_green.ppm', ppm_image)
-write_ppm_rgb_only_red_file('../res/images/new_red.ppm', ppm_image)
+yuv_image = convert_rgb_image_to_yuv(rgb_image)
 
-yuv_image = ppm_image.convert_to_yuv()
+y_matrix, u_matrix, v_matrix = get_yuv_matrices(yuv_image)
 
-write_ppm_yuv_grayscale_file('../res/images/new_yuv_grayscale.ppm', yuv_image)
-write_ppm_yuv_cb_file('../res/images/new_yuv_cb.ppm', yuv_image)
-write_ppm_yuv_cr_file('../res/images/new_yuv_cr.ppm', yuv_image)
-
-yuv_image = ppm_image.convert_to_yuv()
+# y_blocks = divide_y_matrix(y_matrix)
+#
+# u_blocks = divide_u_blocks(u_matrix)
+#
+# v_blocks = divide_v_blocks(v_matrix)
+#
+# store_blocks_list(y_blocks, '../res/images/processing/yblocks')
+# store_blocks_list(u_blocks, '../res/images/processing/ublocks')
+# store_blocks_list(v_blocks, '../res/images/processing/vblocks')
+#
+# print('Y blocks list')
+# print(y_blocks)
+# print('U blocks list')
+# print(u_blocks)
+# print('V blocks list')
+# print(v_blocks)

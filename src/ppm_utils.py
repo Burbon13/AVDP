@@ -1,8 +1,12 @@
-from src.domain import RGBImage, RGBPixel
-from random import random
+from src.domain import YUVPixel, YUVImage, RGBImage, RGBPixel, Block
 
 
 def read_ppm_file(file_name):
+    """
+    Reads a PPM file format image
+    :param file_name: the path of the file
+    :return: an instance of RGBImage
+    """
     rgb_image = RGBImage(pixels=[])
 
     with open(file_name) as open_file:
@@ -36,6 +40,12 @@ def read_ppm_file(file_name):
 
 
 def write_ppm_rgb_file(file_name, image):
+    """
+    Writes an PPM image to file
+    :param file_name: path for the new file
+    :param image: an instance of PPMImage
+    :return: None
+    """
     with open(file_name, 'w+') as write_file:
         write_file.write('P3\n')
         write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
@@ -47,85 +57,27 @@ def write_ppm_rgb_file(file_name, image):
             write_file.write(str(pixel.blue) + '\n')
 
 
-def write_ppm_rgb_only_red_file(file_name, image):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(image.x_size) + ' ' + str(image.y_size) + '\n')
-        write_file.write('255\n')
-        for pixel in image.pixels:
-            write_file.write(str(pixel.red) + '\n')
-            write_file.write('0\n')
-            write_file.write('0\n')
+def convert_rgb_pixel_to_yuv(rgb_pixel):
+    y = int(0.299 * rgb_pixel.red + 0.587 * rgb_pixel.green + 0.114 * rgb_pixel.blue)
+    u = int(128 - 0.1687 * rgb_pixel.red - 0.3312 * rgb_pixel.green + 0.5 * rgb_pixel.blue)
+    v = int(128 + 0.5 * rgb_pixel.red - 0.4186 * rgb_pixel.green - 0.0813 * rgb_pixel.blue)
+    return YUVPixel(y, u, v, rgb_pixel.x_pos, rgb_pixel.y_pos)
 
 
-def write_ppm_rgb_only_green_file(file_name, image):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(image.x_size) + ' ' + str(image.y_size) + '\n')
-        write_file.write('255\n')
-        for pixel in image.pixels:
-            write_file.write('0\n')
-            write_file.write(str(pixel.green) + '\n')
-            write_file.write('0\n')
+def convert_rgb_image_to_yuv(rgb_image):
+    yuv_pixels = []
+    for rgb_pixel in rgb_image.pixels:
+        yuv_pixels.append(convert_rgb_pixel_to_yuv(rgb_pixel))
+    return YUVImage(rgb_image.x_size, rgb_image.y_size, yuv_pixels)
 
 
-def write_ppm_rgb_only_blue_file(file_name, image):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(image.x_size) + ' ' + str(image.y_size) + '\n')
-        write_file.write('255\n')
-        for pixel in image.pixels:
-            write_file.write('0\n')
-            write_file.write('0\n')
-            write_file.write(str(pixel.blue) + '\n')
+def get_yuv_matrices(yuv_image):
+    y_blocks = u_blocks = v_blocks = []
 
+    for y_pos in range(yuv_image.y_size):
+        for x_pos in range(yuv_image.x_size):
+            y_blocks.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].y)
+            u_blocks.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].u)
+            v_blocks.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].v)
 
-def write_ppm_yuv_grayscale_file(file_name, image):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(image.x_size) + ' ' + str(image.y_size) + '\n')
-        write_file.write('255\n')
-        for pixel in image.pixels:
-            write_file.write(str(pixel.y) + '\n')
-            write_file.write(str(pixel.y) + '\n')
-            write_file.write(str(pixel.y) + '\n')
-
-
-def write_ppm_yuv_cb_file(file_name, image):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(image.x_size) + ' ' + str(image.y_size) + '\n')
-        write_file.write('255\n')
-        for pixel in image.pixels:
-            write_file.write(str(pixel.u) + '\n')
-            write_file.write(str(pixel.u) + '\n')
-            write_file.write(str(pixel.u) + '\n')
-
-
-def write_ppm_yuv_cr_file(file_name, image):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(image.x_size) + ' ' + str(image.y_size) + '\n')
-        write_file.write('255\n')
-        for pixel in image.pixels:
-            write_file.write(str(pixel.v) + '\n')
-            write_file.write(str(pixel.v) + '\n')
-            write_file.write(str(pixel.v) + '\n')
-
-
-def generate_random_ppd(file_name, x_size, y_size):
-    with open(file_name, 'w+') as write_file:
-        write_file.write('P3\n')
-        write_file.write('# CREATOR: Most amazing Python 3.x program ever written\n')
-        write_file.write(str(x_size) + ' ' + str(y_size) + '\n')
-        write_file.write('255\n')
-        for _ in range(x_size * y_size):
-            write_file.write(str(int(random() * 255)) + '\n')
-            write_file.write(str(int(random() * 255)) + '\n')
-            write_file.write(str(int(random() * 255)) + '\n')
+    return y_blocks, u_blocks, v_blocks
