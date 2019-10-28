@@ -4,8 +4,14 @@ file_name = '../res/images/nt-P3.ppm'
 
 # generate_random_ppd('../res/images/rand.ppm', 1920, 1080)
 
+# -------------------------------- LAB 1 - The encoder Part --------------------------------------
+print('---- ENCODER PART ----')
+
 print('Reading PPM file')
 rgb_image = read_ppm_file(file_name)
+
+x_size = rgb_image.x_size
+y_size = rgb_image.y_size
 
 print('Converting image from RGB to YUV')
 yuv_image = convert_rgb_image_to_yuv(rgb_image)
@@ -34,3 +40,15 @@ print('V blocks')
 # print_blocks_list(y_blocks)
 print('Writing V blocks into file')
 save_blocks_list(v_blocks, '../res/images/processing/v_blocks')
+
+# -------------------------------- LAB 1 - The decoder Part --------------------------------------
+print('---- DECODER PART ----')
+
+print('Un-dividing V blocks')
+v_matrix = un_divide_4_4_blocks(v_blocks, x_size, y_size)
+
+print('Un-dividing U blocks')
+u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
+
+print('Un-dividing Y blocks')
+y_matrix = un_divide_y_blocks(y_blocks, x_size, y_size)

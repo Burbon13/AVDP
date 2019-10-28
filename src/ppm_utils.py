@@ -1,6 +1,8 @@
 from src.domain import YUVPixel, YUVImage, RGBImage, RGBPixel, Block
 
 
+# -------------------------------- LAB 1 - The encoder Part --------------------------------------
+
 def read_ppm_file(file_name):
     """
     Reads a PPM file format image
@@ -140,3 +142,36 @@ def save_blocks_list(blocks_list, file_name):
     with open(file_name, 'w+') as write_file:
         for block in blocks_list:
             write_file.write(str(block) + '\n')
+
+
+# -------------------------------- LAB 1 - The decoder Part --------------------------------------
+
+def un_divide_4_4_blocks(blocks_list, x_size, y_size):
+    matrix = [[0] * x_size for _ in range(y_size)]
+
+    for block in blocks_list:
+        x_pos_block = block.x_pos * 8
+        y_pos_block = block.y_pos * 8
+        for index, value in enumerate(block.values):
+            x_img = x_pos_block + int(index % 4) * 2
+            y_img = y_pos_block + int(index / 4) * 2
+            matrix[y_img][x_img] = value
+            matrix[y_img + 1][x_img] = value
+            matrix[y_img][x_img + 1] = value
+            matrix[y_img + 1][x_img + 1] = value
+
+    return matrix
+
+
+def un_divide_y_blocks(y_blocks, x_size, y_size):
+    matrix = [[0] * x_size for _ in range(y_size)]
+
+    for block in y_blocks:
+        x_pos_block = block.x_pos * 8
+        y_pos_block = block.y_pos * 8
+        for index, value in enumerate(block.values):
+            x_img = x_pos_block + (index % 8)
+            y_img = y_pos_block + int(index / 8)
+            matrix[y_img][x_img] = value
+
+    return matrix
