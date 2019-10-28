@@ -16,18 +16,21 @@ y_matrix, u_matrix, v_matrix = get_yuv_matrices(yuv_image)
 print('Dividing Y matrix into blocks')
 y_blocks = divide_y_matrix(y_matrix)
 
+u_blocks = divide_4_4_blocks(u_matrix, 'U')
 
-u_blocks = divide_u_blocks(u_matrix)
+v_blocks = divide_4_4_blocks(v_matrix, 'V')
 
-v_blocks = divide_v_blocks(v_matrix)
+print('Y blocks')
+# print_blocks_list(y_blocks)
+print('Writing Y blocks into file')
+save_blocks_list(y_blocks, '../res/images/processing/y_blocks')
 
-# store_blocks_list(y_blocks, '../res/images/processing/yblocks')
-# store_blocks_list(u_blocks, '../res/images/processing/ublocks')
-# store_blocks_list(v_blocks, '../res/images/processing/vblocks')
-#
-# print('Y blocks list')
-# print(y_blocks)
-# print('U blocks list')
-# print(u_blocks)
-# print('V blocks list')
-# print(v_blocks)
+print('U blocks')
+# print_blocks_list(y_blocks)
+print('Writing U blocks into file')
+save_blocks_list(u_blocks, '../res/images/processing/u_blocks')
+
+print('V blocks')
+# print_blocks_list(y_blocks)
+print('Writing V blocks into file')
+save_blocks_list(v_blocks, '../res/images/processing/v_blocks')

@@ -104,3 +104,39 @@ def divide_y_matrix(y_matrix):
             y_blocks.append(Block(block_values, 'Y', x_pos, y_pos))
 
     return y_blocks
+
+
+def divide_4_4_blocks(u_matrix, type):
+    u_blocks = []
+
+    for y_pos in range(int(len(u_matrix) / 8)):
+        for x_pos in range(int(len(u_matrix[0]) / 8)):
+            block_values = []
+            for y_matrix_pos in range(4):
+                for x_matrix_pos in range(4):
+                    avg_value = int((
+                                            u_matrix[y_pos * 8 + y_matrix_pos * 2][x_pos * 8 + x_matrix_pos * 2]
+                                            +
+                                            u_matrix[y_pos * 8 + y_matrix_pos * 2][x_pos * 8 + x_matrix_pos * 2 + 1]
+                                            +
+                                            u_matrix[y_pos * 8 + y_matrix_pos * 2 + 1][x_pos * 8 + x_matrix_pos * 2]
+                                            +
+                                            u_matrix[y_pos * 8 + y_matrix_pos * 2 + 1][x_pos * 8 + x_matrix_pos * 2 + 1]
+                                    ) / 4)
+                    block_values.append(avg_value)
+            u_blocks.append(Block(block_values, type, x_pos, y_pos))
+
+    return u_blocks
+
+
+def print_blocks_list(block_list):
+    print('[')
+    for block in block_list:
+        print(str(block))
+    print(']')
+
+
+def save_blocks_list(blocks_list, file_name):
+    with open(file_name, 'w+') as write_file:
+        for block in blocks_list:
+            write_file.write(str(block) + '\n')

@@ -36,3 +36,9 @@ class Block:
         self.type_of_block = type_of_block
         self.x_pos = x_pos
         self.y_pos = y_pos
+
+    def __str__(self):
+        return f'Type: {self.type_of_block}; x: {self.x_pos}; y: {self.y_pos}; values: {self.values}'
+
+    def __repr__(self):
+        return f'Type: {self.type_of_block}; x: {self.x_pos}; y: {self.y_pos}; values: {self.values}'
