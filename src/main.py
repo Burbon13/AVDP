@@ -1,6 +1,7 @@
 from src.ppm_utils import *
 
 file_name = '../res/images/nt-P3.ppm'
+DEBUG = False
 
 # generate_random_ppd('../res/images/rand.ppm', 1920, 1080)
 
@@ -15,6 +16,12 @@ y_size = rgb_image.y_size
 
 print('Converting image from RGB to YUV')
 yuv_image = convert_rgb_image_to_yuv(rgb_image)
+
+if DEBUG:
+    print('DEBUG: Intermediary YUV image printing...')
+    write_ppm_yuv_grayscale_file('../res/images/processing/grayscale_encoding.ppm', yuv_image)
+    write_ppm_yuv_cb_file('../res/images/processing/U_encoding.ppm', yuv_image)
+    write_ppm_yuv_cr_file('../res/images/processing/V_encoding.ppm', yuv_image)
 
 print('Separating YUV components into different matrices')
 y_matrix, u_matrix, v_matrix = get_yuv_matrices(yuv_image)
@@ -45,21 +52,27 @@ save_blocks_list(v_blocks, '../res/images/processing/v_blocks')
 print('---- DECODER PART ----')
 
 print('Un-dividing V blocks')
-v_matrix = un_divide_4_4_blocks(v_blocks, x_size, y_size)
+decoded_v_matrix = un_divide_4_4_blocks(v_blocks, x_size, y_size)
 
 print('Un-dividing U blocks')
-u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
+decoded_u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
 
 print('Un-dividing Y blocks')
-y_matrix = un_divide_y_blocks(y_blocks, x_size, y_size)
+decoded_y_matrix = un_divide_y_blocks(y_blocks, x_size, y_size)
 
 print('Forming YUV image from matrices')
-yuv_image = form_yuv_image_from_matrices(y_matrix, u_matrix, v_matrix, x_size, y_size)
+decoded_yuv_image = form_yuv_image_from_matrices(decoded_y_matrix, decoded_u_matrix, decoded_v_matrix, x_size, y_size)
+
+if DEBUG:
+    print('DEBUG: Intermediary YUV image printing...')
+    write_ppm_yuv_grayscale_file('../res/images/processing/grayscale_decoding.ppm', decoded_yuv_image)
+    write_ppm_yuv_cb_file('../res/images/processing/U_decoding.ppm', decoded_yuv_image)
+    write_ppm_yuv_cr_file('../res/images/processing/V_decoding.ppm', decoded_yuv_image)
 
 print('Converting YUV image to RGB')
-rgb_image = convert_yuv_image_to_rgb(yuv_image)
+decoded_rgb_image = convert_yuv_image_to_rgb(decoded_yuv_image)
 
 print('Saving converted RGB image')
-write_ppm_rgb_file('../res/images/processing/converted_rgb.ppm', rgb_image)
+write_ppm_rgb_file('../res/images/processing/decoded_rgb.ppm', decoded_rgb_image)
 
 print('DONE! <3')
