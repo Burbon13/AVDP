@@ -72,12 +72,35 @@ def convert_rgb_image_to_yuv(rgb_image):
 
 
 def get_yuv_matrices(yuv_image):
-    y_blocks = u_blocks = v_blocks = []
-
+    y_blocks = []
+    u_blocks = []
+    v_blocks = []
+    b = 0
     for y_pos in range(yuv_image.y_size):
+        y_line = []
+        u_line = []
+        v_line = []
         for x_pos in range(yuv_image.x_size):
-            y_blocks.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].y)
-            u_blocks.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].u)
-            v_blocks.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].v)
-
+            y_line.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].y)
+            u_line.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].u)
+            v_line.append(yuv_image.pixels[y_pos * yuv_image.y_size + x_pos].v)
+        b += 1
+        y_blocks.append(y_line)
+        u_blocks.append(u_line)
+        v_blocks.append(v_line)
+    a = len(y_blocks)
     return y_blocks, u_blocks, v_blocks
+
+
+def divide_y_matrix(y_matrix):
+    y_blocks = []
+
+    for y_pos in range(int(len(y_matrix) / 8)):
+        for x_pos in range(int(len(y_matrix[0]) / 8)):
+            block_values = []
+            for y_matrix_pos in range(8):
+                for x_matrix_pos in range(8):
+                    block_values.append(y_matrix[y_pos * 8 + y_matrix_pos][x_pos * 8 + x_matrix_pos])
+            y_blocks.append(Block(block_values, 'Y', x_pos, y_pos))
+
+    return y_blocks
