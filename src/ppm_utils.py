@@ -175,3 +175,28 @@ def un_divide_y_blocks(y_blocks, x_size, y_size):
             matrix[y_img][x_img] = value
 
     return matrix
+
+
+def form_yuv_image_from_matrices(y_matrix, u_matrix, v_matrix, x_size, y_size):
+    yuv_image = YUVImage(x_size, y_size, [])
+
+    for y_pos in range(y_size):
+        for x_pos in range(x_size):
+            yuv_pixel = YUVPixel(y_matrix[y_pos][x_pos], u_matrix[y_pos][x_pos], v_matrix[y_pos][x_pos], x_pos, y_pos)
+            yuv_image.pixels.append(yuv_pixel)
+
+    return yuv_image
+
+
+def convert_yuv_pixel_to_rgb(yuv_pixel):
+    r = int(yuv_pixel.y + 1.140 * yuv_pixel.v)
+    g = int(yuv_pixel.y - 0.395 * yuv_pixel.u - 0.581 * yuv_pixel.v)
+    b = int(yuv_pixel.y + 2.032 * yuv_pixel.u)
+    return RGBPixel(r, g, b, yuv_pixel.x_pos, yuv_pixel.y_pos)
+
+
+def convert_yuv_image_to_rgb(yuv_image):
+    rgb_pixels = []
+    for yuv_pixel in yuv_image.pixels:
+        rgb_pixels.append(convert_yuv_pixel_to_rgb(yuv_pixel))
+    return YUVImage(yuv_image.x_size, yuv_image.y_size, rgb_pixels)

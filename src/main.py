@@ -52,3 +52,14 @@ u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
 
 print('Un-dividing Y blocks')
 y_matrix = un_divide_y_blocks(y_blocks, x_size, y_size)
+
+print('Forming YUV image from matrices')
+yuv_image = form_yuv_image_from_matrices(y_matrix, u_matrix, v_matrix, x_size, y_size)
+
+print('Converting YUV image to RGB')
+rgb_image = convert_yuv_image_to_rgb(yuv_image)
+
+print('Saving converted RGB image')
+write_ppm_rgb_file('../res/images/processing/converted_rgb.ppm', rgb_image)
+
+print('DONE! <3')
