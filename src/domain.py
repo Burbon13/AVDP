@@ -37,6 +37,12 @@ class Block:
         self.x_pos = x_pos
         self.y_pos = y_pos
 
+    def get_value(self, x, y):
+        return self.values[8 * y + x]
+
+    def set_value(self, x, y, value):
+        self.values[8 * y + x] = value
+
     def __str__(self):
         return f'Type: {self.type_of_block}; x: {self.x_pos}; y: {self.y_pos}; values: {self.values}'
 

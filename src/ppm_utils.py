@@ -1,4 +1,5 @@
 from src.domain import YUVPixel, YUVImage, RGBImage, RGBPixel, Block
+from math import cos, pi
 
 
 # -------------------------------- LAB 1 - The encoder Part --------------------------------------
@@ -173,6 +174,65 @@ def save_blocks_list(blocks_list, file_name):
     with open(file_name, 'w+') as write_file:
         for block in blocks_list:
             write_file.write(str(block) + '\n')
+
+
+# -------------------------------- LAB 2 - The encoder Part --------------------------------------
+
+
+def sigma(value):
+    if value == 0:
+        return 1 / 1.41421356237
+    return 1
+
+
+def calculate_discrete_cosine_transform_cell_value(u, v, block_8_8):
+    cos_sum = 0
+
+    for x in range(8):
+        for y in range(8):
+            cos_sum += block_8_8.get_value(x, y) * cos(((2 * x + 1) * u * pi) / 16) * cos(((2 * x + 1) * v * pi) / 16)
+
+    return 0.25 * sigma(u) * sigma(v) * cos_sum
+
+
+def discrete_cosine_transform_block(block_8_8):
+    transformed_block = Block([], block_8_8.type_of_block, block_8_8.x_pos, block_8_8.y_pos)
+
+    for y in range(8):
+        for x in range(8):
+            block_8_8.set_value(x, y, block_8_8.get_value(x, y) - 128)
+
+    for y in range(8):
+        for x in range(8):
+            transformed_block.values.append(calculate_discrete_cosine_transform_cell_value(x, y, block_8_8))
+
+    return transformed_block
+
+
+quantization_matrix = [
+    [6, 4, 4, 6, 10, 16, 20, 24],
+    [5, 5, 6, 8, 10, 23, 24, 22],
+    [6, 5, 6, 10, 16, 23, 28, 22],
+    [6, 7, 9, 12, 20, 35, 32, 25],
+    [7, 9, 15, 22, 27, 44, 41, 31],
+    [10, 14, 22, 26, 32, 42, 45, 37],
+    [20, 26, 31, 35, 41, 48, 48, 40],
+    [29, 37, 38, 39, 45, 40, 41, 40]
+]
+
+
+def quantization():
+    pass
+
+
+# -------------------------------- LAB 2 - The decoder Part --------------------------------------
+
+def inverse_quantization():
+    pass
+
+
+def inverse_discrete_cosine_transform_block():
+    pass
 
 
 # -------------------------------- LAB 1 - The decoder Part --------------------------------------

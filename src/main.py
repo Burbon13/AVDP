@@ -48,6 +48,14 @@ print('V blocks')
 print('Writing V blocks into file')
 save_blocks_list(v_blocks, '../res/images/processing/v_blocks')
 
+# -------------------------------- LAB 2 - The encoder Part --------------------------------------
+
+
+
+# -------------------------------- LAB 2 - The decoder Part --------------------------------------
+
+
+
 # -------------------------------- LAB 1 - The decoder Part --------------------------------------
 print('---- DECODER PART ----')
 
