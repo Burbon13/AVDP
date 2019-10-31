@@ -190,7 +190,7 @@ def calculate_discrete_cosine_transform_cell_value(u, v, block_8_8):
 
     for x in range(8):
         for y in range(8):
-            cos_sum += block_8_8.get_value(x, y) * cos(((2 * x + 1) * u * pi) / 16) * cos(((2 * x + 1) * v * pi) / 16)
+            cos_sum += block_8_8.get_value(x, y) * cos(((2 * x + 1) * u * pi) / 16) * cos(((2 * y + 1) * v * pi) / 16)
 
     return 0.25 * sigma(u) * sigma(v) * cos_sum
 
@@ -221,18 +221,44 @@ quantization_matrix = [
 ]
 
 
-def quantization():
-    pass
+def quantization(block_8_8):
+    for y in range(8):
+        for x in range(8):
+            block_8_8.set_value(x, y, int(block_8_8.get_value(x, y) / quantization_matrix[y][x]))
 
 
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
 
-def inverse_quantization():
-    pass
+def inverse_quantization(block_8_8):
+    for y in range(8):
+        for x in range(8):
+            block_8_8.set_value(x, y, int(block_8_8.get_value(x, y) * quantization_matrix[y][x]))
 
 
-def inverse_discrete_cosine_transform_block():
-    pass
+def inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8):
+    cos_sum = 0
+
+    for v in range(8):
+        for u in range(8):
+            cos_sum += sigma(u) * sigma(v) * block_8_8.get_value(u, v) * cos(((2 * x + 1) * u * pi) / 16) * cos(
+                ((2 * y + 1) * v * pi) / 16)
+
+    return 0.25 * cos_sum
+
+
+def inverse_discrete_cosine_transform_block(block_8_8):
+    inverse_transformed_block = Block([], block_8_8.type_of_block, block_8_8.x_pos, block_8_8.y_pos)
+
+    for y in range(8):
+        for x in range(8):
+            block_8_8.set_value(x, y, block_8_8.get_value(x, y) - 128)
+
+    for y in range(8):
+        for x in range(8):
+            inverse_transformed_block.values.append(
+                inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8))
+
+    return inverse_transformed_block
 
 
 # -------------------------------- LAB 1 - The decoder Part --------------------------------------
