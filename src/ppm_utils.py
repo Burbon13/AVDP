@@ -60,6 +60,11 @@ def write_ppm_rgb_file(file_name, image):
 
 
 def clamp_0_255_value(value):
+    """
+    Clamps the value between 0 and 255
+    :param value: the value to be clamped
+    :return: clamped value between 0 and 255
+    """
     if value < 0:
         return 0
     if value > 255:
@@ -68,6 +73,11 @@ def clamp_0_255_value(value):
 
 
 def convert_rgb_pixel_to_yuv(rgb_pixel):
+    """
+    Converts an RGB pixel to an UIV pixel
+    :param rgb_pixel: the pixel to be converted
+    :return: the YUV pixel
+    """
     y = clamp_0_255_value(int(0.257 * rgb_pixel.red + 0.504 * rgb_pixel.green + 0.098 * rgb_pixel.blue))
     v = clamp_0_255_value(int(128 - 0.148 * rgb_pixel.red - 0.291 * rgb_pixel.green + 0.439 * rgb_pixel.blue))
     u = clamp_0_255_value(int(128 + 0.439 * rgb_pixel.red - 0.368 * rgb_pixel.green - 0.071 * rgb_pixel.blue))
@@ -75,6 +85,11 @@ def convert_rgb_pixel_to_yuv(rgb_pixel):
 
 
 def convert_rgb_image_to_yuv(rgb_image):
+    """
+    Converts an RGB image to an UIV image
+    :param rgb_image: the image to be converted
+    :return: the YUV image
+    """
     yuv_pixels = []
     for rgb_pixel in rgb_image.pixels:
         yuv_pixels.append(convert_rgb_pixel_to_yuv(rgb_pixel))
@@ -82,6 +97,11 @@ def convert_rgb_image_to_yuv(rgb_image):
 
 
 def get_yuv_matrices(yuv_image):
+    """
+    Separates the Y,U and V components into separate matrices
+    :param yuv_image: the image to be separated
+    :return: (y matrix, u matrix, v matrix)
+    """
     y_blocks = []
     u_blocks = []
     v_blocks = []
@@ -101,6 +121,11 @@ def get_yuv_matrices(yuv_image):
 
 
 def divide_y_matrix(y_matrix):
+    """
+    Divides the Y matrix into 8X8 pixel blocks
+    :param y_matrix: the Y component matrix
+    :return: a list with the blocks
+    """
     y_blocks = []
 
     for y_pos in range(int(len(y_matrix) / 8)):
