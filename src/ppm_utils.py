@@ -251,12 +251,12 @@ def inverse_discrete_cosine_transform_block(block_8_8):
 
     for y in range(8):
         for x in range(8):
-            block_8_8.set_value(x, y, block_8_8.get_value(x, y) - 128)
+            inverse_transformed_block.values.append(
+                inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8))
 
     for y in range(8):
         for x in range(8):
-            inverse_transformed_block.values.append(
-                inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8))
+            inverse_transformed_block.set_value(x, y, inverse_transformed_block.get_value(x, y) + 128)
 
     return inverse_transformed_block
 
