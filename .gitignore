@@ -125,4 +125,4 @@ dmypy.json
 .pyre/
 
 .idea/
-res/
+res/images/processing/*
