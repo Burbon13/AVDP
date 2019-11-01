@@ -50,20 +50,65 @@ save_blocks_list(v_blocks, '../res/images/processing/v_blocks')
 
 # -------------------------------- LAB 2 - The encoder Part --------------------------------------
 
+print('Transforming v blocks from 4X4 to 8X8')
+enlarged_v_blocks = from_4_4_to_8_8(v_blocks, x_size, y_size)
+print('Transforming u blocks from 4X4 to 8X8')
+enlarged_u_blocks = from_4_4_to_8_8(u_blocks, x_size, y_size)
 
+print('Applying discrete cosine transform and quantization on Y blocks')
+cosine_quantized_transformed_y_blocks = []
+for block in y_blocks:
+    cosined_block = discrete_cosine_transform_block(block)
+    quantization(cosined_block)
+    cosine_quantized_transformed_y_blocks.append(cosined_block)
+
+print('Applying discrete cosine transform and quantization on U blocks')
+cosine_quantized_transformed_u_blocks = []
+for block in enlarged_u_blocks:
+    cosined_block = discrete_cosine_transform_block(block)
+    quantization(cosined_block)
+    cosine_quantized_transformed_u_blocks.append(cosined_block)
+
+print('Applying discrete cosine transform and quantization on V blocks')
+cosine_quantized_transformed_v_blocks = []
+for block in enlarged_v_blocks:
+    cosined_block = discrete_cosine_transform_block(block)
+    quantization(cosined_block)
+    cosine_quantized_transformed_v_blocks.append(cosined_block)
 
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
 
 
+print('Undoing discrete cosine transform and quantization on Y blocks')
+undo_cosine_quantized_transformed_y_blocks = []
+for block in cosine_quantized_transformed_y_blocks:
+    inverse_quantization(block)
+    undo_cosine_quantized_transformed_y_blocks.append(inverse_discrete_cosine_transform_block(block))
+
+print('Undoing discrete cosine transform and quantization on U blocks')
+undo_cosine_quantized_transformed_u_blocks = []
+for block in cosine_quantized_transformed_u_blocks:
+    inverse_quantization(block)
+    undo_cosine_quantized_transformed_u_blocks.append(inverse_discrete_cosine_transform_block(block))
+
+print('Undoing discrete cosine transform and quantization on V blocks')
+undo_cosine_quantized_transformed_v_blocks = []
+for block in cosine_quantized_transformed_v_blocks:
+    inverse_quantization(block)
+    undo_cosine_quantized_transformed_v_blocks.append(inverse_discrete_cosine_transform_block(block))
 
 # -------------------------------- LAB 1 - The decoder Part --------------------------------------
+
+
 print('---- DECODER PART ----')
 
 print('Un-dividing V blocks')
-decoded_v_matrix = un_divide_4_4_blocks(v_blocks, x_size, y_size)
+# decoded_v_matrix = un_divide_4_4_blocks(v_blocks, x_size, y_size)
+decoded_v_matrix = un_divide_y_blocks(undo_cosine_quantized_transformed_y_blocks, x_size, y_size)
 
 print('Un-dividing U blocks')
-decoded_u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
+# decoded_u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
+decoded_u_matrix = un_divide_y_blocks(undo_cosine_quantized_transformed_u_blocks, x_size, y_size)
 
 print('Un-dividing Y blocks')
 decoded_y_matrix = un_divide_y_blocks(y_blocks, x_size, y_size)

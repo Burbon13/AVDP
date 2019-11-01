@@ -179,6 +179,11 @@ def save_blocks_list(blocks_list, file_name):
 # -------------------------------- LAB 2 - The encoder Part --------------------------------------
 
 
+def from_4_4_to_8_8(block_4_4, x_size, y_size):
+    undivided_blocks = un_divide_4_4_blocks(block_4_4, x_size, y_size)
+    return divide_y_matrix(undivided_blocks)
+
+
 def sigma(value):
     if value == 0:
         return 1 / 1.41421356237
