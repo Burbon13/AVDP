@@ -38,7 +38,7 @@ class Block:
         self.y_pos = y_pos
 
     def get_value(self, x, y):
-        return self.values[8 * y + x]
+        return self.values[(y << 3) + x]
 
     def set_value(self, x, y, value):
         self.values[8 * y + x] = value

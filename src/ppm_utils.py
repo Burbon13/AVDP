@@ -190,14 +190,29 @@ def sigma(value):
     return 1
 
 
+# ------ DATA BLOCK ---------
+sigma_table = []
+for index in range(8):
+    sigma_table.append(sigma(index))
+sigma_multiplier = []
+cos_dict = {}
+for i1 in range(8):
+    sigma_multiplier_list = []
+    for i2 in range(8):
+        sigma_multiplier_list.append(sigma_table[i1] * sigma_table[i1])
+        cos_dict[((2 * i1 + 1) * i2 * pi) / 16] = cos(((2 * i1 + 1) * i2 * pi) / 16)
+    sigma_multiplier.append(sigma_multiplier_list)
+# ------ DATA BLOCK ---------
+
 def calculate_discrete_cosine_transform_cell_value(u, v, block_8_8):
     cos_sum = 0
 
     for x in range(8):
         for y in range(8):
-            cos_sum += block_8_8.get_value(x, y) * cos(((2 * x + 1) * u * pi) / 16) * cos(((2 * y + 1) * v * pi) / 16)
+            cos_sum += block_8_8.get_value(x, y) * cos_dict[((2 * x + 1) * u * pi) / 16] * cos_dict[
+                ((2 * y + 1) * v * pi) / 16]
 
-    return 0.25 * sigma(u) * sigma(v) * cos_sum
+    return 0.25 * sigma_table[u] * sigma_table[v] * cos_sum
 
 
 def discrete_cosine_transform_block(block_8_8):
@@ -209,7 +224,7 @@ def discrete_cosine_transform_block(block_8_8):
 
     for y in range(8):
         for x in range(8):
-            transformed_block.values.append(calculate_discrete_cosine_transform_cell_value(x, y, block_8_8))
+            transformed_block.values.append(calculate_discrete_cosine_transform_cell_value(y, x, block_8_8))
 
     return transformed_block
 
@@ -243,10 +258,11 @@ def inverse_quantization(block_8_8):
 def inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8):
     cos_sum = 0
 
-    for v in range(8):
-        for u in range(8):
-            cos_sum += sigma(u) * sigma(v) * block_8_8.get_value(u, v) * cos(((2 * x + 1) * u * pi) / 16) * cos(
-                ((2 * y + 1) * v * pi) / 16)
+    for u in range(8):
+        for v in range(8):
+            cos_sum += sigma_table[u] * sigma_table[v] * block_8_8.get_value(u, v) * cos_dict[
+                ((2 * x + 1) * u * pi) / 16] * cos_dict[
+                           ((2 * y + 1) * v * pi) / 16]
 
     return 0.25 * cos_sum
 
@@ -257,7 +273,7 @@ def inverse_discrete_cosine_transform_block(block_8_8):
     for y in range(8):
         for x in range(8):
             inverse_transformed_block.values.append(
-                inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8))
+                inverse_calculate_discrete_cosine_transform_cell_value(y, x, block_8_8))
 
     for y in range(8):
         for x in range(8):

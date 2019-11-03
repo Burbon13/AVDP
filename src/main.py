@@ -1,6 +1,8 @@
 from src.ppm_utils import *
 
-file_name = '../res/images/nt-P3.ppm'
+# file_name = '../res/images/nt-P3.ppm'
+# file_name = '../res/images/best.ppm'
+file_name = '../res/images/craciunelul.ppm'
 DEBUG = False
 
 # generate_random_ppd('../res/images/rand.ppm', 1920, 1080)
@@ -78,6 +80,7 @@ for block in enlarged_v_blocks:
 
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
 
+print('---- DECODER PART ----')
 
 print('Undoing discrete cosine transform and quantization on Y blocks')
 undo_cosine_quantized_transformed_y_blocks = []
@@ -99,19 +102,16 @@ for block in cosine_quantized_transformed_v_blocks:
 
 # -------------------------------- LAB 1 - The decoder Part --------------------------------------
 
-
-print('---- DECODER PART ----')
-
 print('Un-dividing V blocks')
 # decoded_v_matrix = un_divide_4_4_blocks(v_blocks, x_size, y_size)
-decoded_v_matrix = un_divide_y_blocks(undo_cosine_quantized_transformed_y_blocks, x_size, y_size)
+decoded_v_matrix = un_divide_y_blocks(undo_cosine_quantized_transformed_v_blocks, x_size, y_size)
 
 print('Un-dividing U blocks')
 # decoded_u_matrix = un_divide_4_4_blocks(u_blocks, x_size, y_size)
 decoded_u_matrix = un_divide_y_blocks(undo_cosine_quantized_transformed_u_blocks, x_size, y_size)
 
 print('Un-dividing Y blocks')
-decoded_y_matrix = un_divide_y_blocks(y_blocks, x_size, y_size)
+decoded_y_matrix = un_divide_y_blocks(undo_cosine_quantized_transformed_y_blocks, x_size, y_size)
 
 print('Forming YUV image from matrices')
 decoded_yuv_image = form_yuv_image_from_matrices(decoded_y_matrix, decoded_u_matrix, decoded_v_matrix, x_size, y_size)
