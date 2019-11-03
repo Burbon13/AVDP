@@ -200,8 +200,17 @@ for i1 in range(8):
     sigma_multiplier_list = []
     for i2 in range(8):
         sigma_multiplier_list.append(sigma_table[i1] * sigma_table[i1])
-        cos_dict[((2 * i1 + 1) * i2 * pi) / 16] = cos(((2 * i1 + 1) * i2 * pi) / 16)
+        cos_dict[(i1, i2)] = cos(((2 * i1 + 1) * i2 * pi) / 16)
     sigma_multiplier.append(sigma_multiplier_list)
+
+cos_comp_dict = {}
+for i1 in range(8):
+    for i2 in range(8):
+        for i3 in range(8):
+            for i4 in range(8):
+                cos_comp_dict[(i1, i2, i3, i4)] = cos_dict[(i1, i2)] * cos_dict[(i3, i4)]
+
+
 # ------ DATA BLOCK ---------
 
 def calculate_discrete_cosine_transform_cell_value(u, v, block_8_8):
@@ -209,8 +218,7 @@ def calculate_discrete_cosine_transform_cell_value(u, v, block_8_8):
 
     for x in range(8):
         for y in range(8):
-            cos_sum += block_8_8.get_value(x, y) * cos_dict[((2 * x + 1) * u * pi) / 16] * cos_dict[
-                ((2 * y + 1) * v * pi) / 16]
+            cos_sum += block_8_8.get_value(x, y) * cos_comp_dict[(x, u, y, v)]
 
     return 0.25 * sigma_table[u] * sigma_table[v] * cos_sum
 
@@ -260,9 +268,7 @@ def inverse_calculate_discrete_cosine_transform_cell_value(x, y, block_8_8):
 
     for u in range(8):
         for v in range(8):
-            cos_sum += sigma_table[u] * sigma_table[v] * block_8_8.get_value(u, v) * cos_dict[
-                ((2 * x + 1) * u * pi) / 16] * cos_dict[
-                           ((2 * y + 1) * v * pi) / 16]
+            cos_sum += sigma_table[u] * sigma_table[v] * block_8_8.get_value(u, v) * cos_comp_dict[(x, u, y, v)]
 
     return 0.25 * cos_sum
 

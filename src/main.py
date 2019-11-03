@@ -1,8 +1,9 @@
 from src.ppm_utils import *
 
-# file_name = '../res/images/nt-P3.ppm'
+file_name = '../res/images/nt-P3.ppm'
 # file_name = '../res/images/best.ppm'
-file_name = '../res/images/craciunelul.ppm'
+# file_name = '../res/images/craciunelul.ppm'
+# file_name = '../res/images/text.ppm'
 DEBUG = False
 
 # generate_random_ppd('../res/images/rand.ppm', 1920, 1080)
