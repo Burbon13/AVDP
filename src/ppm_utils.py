@@ -255,6 +255,58 @@ def quantization(block_8_8):
             block_8_8.set_value(x, y, int(block_8_8.get_value(x, y) / quantization_matrix[y][x]))
 
 
+# -------------------------------- LAB 3 - The encoder Part --------------------------------------
+
+def do_zig_zag(block):
+    rows = 8
+    columns = 8
+
+    solution = [[] for i in range(rows + columns - 1)]
+
+    for i in range(rows):
+        for j in range(columns):
+            my_sum = i + j
+            if my_sum % 2 == 0:
+                # add at beginning
+                solution[my_sum].insert(0, block.get_value(j, i))
+            else:
+                # add at end of the list
+                solution[my_sum].append(block.get_value(j, i))
+
+    final_result = []
+    for s in solution:
+        final_result = [*final_result, *s]
+
+    return final_result
+
+
+def do_run_length_encoding():
+    pass
+
+
+# -------------------------------- LAB 3 - The decoder Part --------------------------------------
+
+def undo_run_length_encoding():
+    pass
+
+
+undo_zig_zag_pos = [(0, 0), (0, 1), (1, 0), (2, 0), (1, 1), (0, 2), (0, 3), (1, 2), (2, 1), (3, 0), (4, 0), (3, 1),
+                    (2, 2), (1, 3), (0, 4), (0, 5), (1, 4), (2, 3), (3, 2), (4, 1), (5, 0), (6, 0), (5, 1), (4, 2),
+                    (3, 3), (2, 4), (1, 5), (0, 6), (0, 7), (1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1), (7, 0),
+                    (7, 1), (6, 2), (5, 3), (4, 4), (3, 5), (2, 6), (1, 7), (2, 7), (3, 6), (4, 5), (5, 4), (6, 3),
+                    (7, 2), (7, 3), (6, 4), (5, 5), (4, 6), (3, 7), (4, 7), (5, 6), (6, 5), (7, 4), (7, 5), (6, 6),
+                    (5, 7), (6, 7), (7, 6), (7, 7)]
+
+
+def undo_zig_zag(values, type, x_pos, y_pos):
+    block = Block([0 for x in range(len(values))], type, x_pos, y_pos)
+
+    for index in range(64):
+        block.set_value(undo_zig_zag_pos[index][1], undo_zig_zag_pos[index][0], values[index])
+
+    return block
+
+
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
 
 def inverse_quantization(block_8_8):

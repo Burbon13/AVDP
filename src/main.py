@@ -79,6 +79,12 @@ for block in enlarged_v_blocks:
     quantization(cosined_block)
     cosine_quantized_transformed_v_blocks.append(cosined_block)
 
+# -------------------------------- LAB 3 - The encoder Part --------------------------------------
+
+
+# -------------------------------- LAB 3 - The decoder Part --------------------------------------
+
+
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
 
 print('---- DECODER PART ----')
