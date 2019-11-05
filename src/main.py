@@ -81,9 +81,18 @@ for block in enlarged_v_blocks:
 
 # -------------------------------- LAB 3 - The encoder Part --------------------------------------
 
+zig_zagged_y_blocks = [do_zig_zag(block) for block in cosine_quantized_transformed_y_blocks]
+zig_zagged_u_blocks = [do_zig_zag(block) for block in cosine_quantized_transformed_u_blocks]
+zig_zagged_v_blocks = [do_zig_zag(block) for block in cosine_quantized_transformed_v_blocks]
 
 # -------------------------------- LAB 3 - The decoder Part --------------------------------------
 
+un_zig_zagged_y_blocks = [undo_zig_zag(block, 'Y', index / x_size, index % y_size) for index, block in
+                          enumerate(zig_zagged_y_blocks)]
+un_zig_zagged_u_blocks = [undo_zig_zag(block, 'U', index / x_size, index % y_size) for index, block in
+                          enumerate(zig_zagged_u_blocks)]
+un_zig_zagged_v_blocks = [undo_zig_zag(block, 'V', index / x_size, index % y_size) for index, block in
+                          enumerate(zig_zagged_v_blocks)]
 
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
 
@@ -91,19 +100,19 @@ print('---- DECODER PART ----')
 
 print('Undoing discrete cosine transform and quantization on Y blocks')
 undo_cosine_quantized_transformed_y_blocks = []
-for block in cosine_quantized_transformed_y_blocks:
+for block in un_zig_zagged_y_blocks:
     inverse_quantization(block)
     undo_cosine_quantized_transformed_y_blocks.append(inverse_discrete_cosine_transform_block(block))
 
 print('Undoing discrete cosine transform and quantization on U blocks')
 undo_cosine_quantized_transformed_u_blocks = []
-for block in cosine_quantized_transformed_u_blocks:
+for block in un_zig_zagged_u_blocks:
     inverse_quantization(block)
     undo_cosine_quantized_transformed_u_blocks.append(inverse_discrete_cosine_transform_block(block))
 
 print('Undoing discrete cosine transform and quantization on V blocks')
 undo_cosine_quantized_transformed_v_blocks = []
-for block in cosine_quantized_transformed_v_blocks:
+for block in un_zig_zagged_v_blocks:
     inverse_quantization(block)
     undo_cosine_quantized_transformed_v_blocks.append(inverse_discrete_cosine_transform_block(block))
 
