@@ -81,22 +81,31 @@ for block in enlarged_v_blocks:
 
 # -------------------------------- LAB 3 - The encoder Part --------------------------------------
 
+print('Zig zagging Y blocks')
 zig_zagged_y_blocks = [do_zig_zag(block) for block in cosine_quantized_transformed_y_blocks]
+
+print('Zig zagging U blocks')
 zig_zagged_u_blocks = [do_zig_zag(block) for block in cosine_quantized_transformed_u_blocks]
+
+print('Zig zagging V blocks')
 zig_zagged_v_blocks = [do_zig_zag(block) for block in cosine_quantized_transformed_v_blocks]
 
 # -------------------------------- LAB 3 - The decoder Part --------------------------------------
+print('---- DECODER PART ----')
 
-un_zig_zagged_y_blocks = [undo_zig_zag(block, 'Y', index / x_size, index % y_size) for index, block in
+print('Un zig zagging Y blocks')
+un_zig_zagged_y_blocks = [undo_zig_zag(block, 'Y', index % (x_size // 8), index // (x_size // 8)) for index, block in
                           enumerate(zig_zagged_y_blocks)]
-un_zig_zagged_u_blocks = [undo_zig_zag(block, 'U', index / x_size, index % y_size) for index, block in
+
+print('Un zig zagging U blocks')
+un_zig_zagged_u_blocks = [undo_zig_zag(block, 'U', index % (x_size // 8), index // (x_size // 8)) for index, block in
                           enumerate(zig_zagged_u_blocks)]
-un_zig_zagged_v_blocks = [undo_zig_zag(block, 'V', index / x_size, index % y_size) for index, block in
+
+print('Un zig zagging V blocks')
+un_zig_zagged_v_blocks = [undo_zig_zag(block, 'V', index % (x_size // 8), index // (x_size // 8)) for index, block in
                           enumerate(zig_zagged_v_blocks)]
 
 # -------------------------------- LAB 2 - The decoder Part --------------------------------------
-
-print('---- DECODER PART ----')
 
 print('Undoing discrete cosine transform and quantization on Y blocks')
 undo_cosine_quantized_transformed_y_blocks = []
