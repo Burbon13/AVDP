@@ -297,7 +297,7 @@ def do_run_length_encoding(zig_zag_list):
     amplitude = get_amplitude(zig_zag_list[0])
     to_return.append((amplitude, zig_zag_list[0]))
 
-    how_many_zeros = 1 if zig_zag_list[0] == 0 else 0
+    how_many_zeros = 0
     for index in range(1, len(zig_zag_list)):
         if zig_zag_list[index] == 0:
             how_many_zeros += 1
