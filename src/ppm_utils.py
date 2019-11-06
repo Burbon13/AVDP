@@ -280,14 +280,49 @@ def do_zig_zag(block):
     return final_result
 
 
-def do_run_length_encoding():
-    pass
+def get_amplitude(val):
+    abs_val = abs(val)
+    my_index = 1
+    power = 2
+    while power - 1 < abs_val:
+        my_index += 1
+        power <<= 1
+
+    return my_index
+
+
+def do_run_length_encoding(zig_zag_list):
+    to_return = []
+
+    amplitude = get_amplitude(zig_zag_list[0])
+    to_return.append((amplitude, zig_zag_list[0]))
+
+    how_many_zeros = 1 if zig_zag_list[0] == 0 else 0
+    for index in range(1, len(zig_zag_list)):
+        if zig_zag_list[index] == 0:
+            how_many_zeros += 1
+            continue
+        to_return.append(((how_many_zeros, get_amplitude(zig_zag_list[index])), zig_zag_list[index]))
+        how_many_zeros = 0
+
+    to_return.append((0, 0))
+    return to_return
 
 
 # -------------------------------- LAB 3 - The decoder Part --------------------------------------
 
-def undo_run_length_encoding():
-    pass
+def undo_run_length_encoding(encoded_list):
+    to_return = [encoded_list[0][1]]
+
+    for index in range(1, len(encoded_list) - 1):
+        for _ in range(encoded_list[index][0][0]):
+            to_return.append(0)
+        to_return.append(encoded_list[index][1])
+
+    while len(to_return) < 64:
+        to_return.append(0)
+
+    return to_return
 
 
 undo_zig_zag_pos = [(0, 0), (0, 1), (1, 0), (2, 0), (1, 1), (0, 2), (0, 3), (1, 2), (2, 1), (3, 0), (4, 0), (3, 1),
