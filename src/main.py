@@ -93,9 +93,12 @@ zig_zagged_v_blocks = [do_zig_zag(block) for block in cosine_quantized_transform
 print('Run length encoding')
 run_length_encoding = []
 for y, u, v in zip(zig_zagged_y_blocks, zig_zagged_u_blocks, zig_zagged_v_blocks):
-    run_length_encoding.append(do_run_length_encoding(y))
-    run_length_encoding.append(do_run_length_encoding(u))
-    run_length_encoding.append(do_run_length_encoding(v))
+    # run_length_encoding.append(do_run_length_encoding(y))
+    # run_length_encoding.append(do_run_length_encoding(u))
+    # run_length_encoding.append(do_run_length_encoding(v))
+    do_run_length_encoding(y, run_length_encoding)
+    do_run_length_encoding(u, run_length_encoding)
+    do_run_length_encoding(v, run_length_encoding)
 
 # -------------------------------- LAB 3 - The decoder Part --------------------------------------
 print('---- DECODER PART ----')
@@ -104,10 +107,14 @@ print('Run length decoding')
 run_length_decoded_y = []
 run_length_decoded_u = []
 run_length_decoded_v = []
-for index in range(0, len(run_length_encoding), 3):
-    run_length_decoded_y.append(undo_run_length_encoding(run_length_encoding[index]))
-    run_length_decoded_u.append(undo_run_length_encoding(run_length_encoding[index + 1]))
-    run_length_decoded_v.append(undo_run_length_encoding(run_length_encoding[index + 2]))
+encoding_index = 0
+while encoding_index < len(run_length_encoding):
+    y_val, encoding_index = undo_run_length_encoding(run_length_encoding, encoding_index)
+    u_val, encoding_index = undo_run_length_encoding(run_length_encoding, encoding_index)
+    v_val, encoding_index = undo_run_length_encoding(run_length_encoding, encoding_index)
+    run_length_decoded_y.append(y_val)
+    run_length_decoded_u.append(u_val)
+    run_length_decoded_v.append(v_val)
 
 print('Un zig zagging Y blocks')
 un_zig_zagged_y_blocks = [undo_zig_zag(block, 'Y', index % (x_size // 8), index // (x_size // 8)) for index, block in

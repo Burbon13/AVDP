@@ -291,38 +291,72 @@ def get_amplitude(val):
     return my_index
 
 
-def do_run_length_encoding(zig_zag_list):
+# Without tuples
+def do_run_length_encoding(zig_zag_list, encoding_list):
     to_return = []
 
     amplitude = get_amplitude(zig_zag_list[0])
-    to_return.append((amplitude, zig_zag_list[0]))
+    # to_return.append((amplitude, zig_zag_list[0]))
+    encoding_list.append(amplitude)
+    encoding_list.append(zig_zag_list[0])
 
     how_many_zeros = 0
+    additions = 1
     for index in range(1, len(zig_zag_list)):
         if zig_zag_list[index] == 0:
             how_many_zeros += 1
             continue
-        to_return.append(((how_many_zeros, get_amplitude(zig_zag_list[index])), zig_zag_list[index]))
+        # to_return.append(((how_many_zeros, get_amplitude(zig_zag_list[index])), zig_zag_list[index]))
+        encoding_list.append(how_many_zeros)
+        encoding_list.append(get_amplitude(zig_zag_list[index]))
+        encoding_list.append(zig_zag_list[index])
         how_many_zeros = 0
+        additions += 1
 
-    to_return.append((0, 0))
-    return to_return
+    # to_return.append((0, 0))
+    if additions < 64:
+        encoding_list.append(0)
+        encoding_list.append(0)
+
+    # print('RUN LENGHT ENCODING')
+    # print(to_return)
+    # return to_return
 
 
 # -------------------------------- LAB 3 - The decoder Part --------------------------------------
 
-def undo_run_length_encoding(encoded_list):
-    to_return = [encoded_list[0][1]]
+def undo_run_length_encoding(encoded_list, index):
+    to_return = [encoded_list[index + 1]]
+    index += 2
+    additions = 1
 
-    for index in range(1, len(encoded_list) - 1):
-        for _ in range(encoded_list[index][0][0]):
+    # for index in range(1, len(encoded_list) - 1):
+    #     for _ in range(encoded_list[index][0][0]):
+    #         to_return.append(0)
+    #     to_return.append(encoded_list[index][1])
+
+    while True:
+        runlength = encoded_list[index]
+        index += 1
+        size = encoded_list[index]
+        index += 1
+        if runlength == 0 and size == 0:
+            break
+
+        while runlength > 0:
+            additions += 1
             to_return.append(0)
-        to_return.append(encoded_list[index][1])
+            runlength -= 1
 
-    while len(to_return) < 64:
+        to_return.append(encoded_list[index])
+        index += 1
+        additions += 1
+
+    while additions < 64:
+        additions += 1
         to_return.append(0)
 
-    return to_return
+    return to_return, index
 
 
 undo_zig_zag_pos = [(0, 0), (0, 1), (1, 0), (2, 0), (1, 1), (0, 2), (0, 3), (1, 2), (2, 1), (3, 0), (4, 0), (3, 1),
