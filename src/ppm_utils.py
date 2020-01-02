@@ -1,4 +1,4 @@
-from src.domain import YUVPixel, YUVImage, RGBImage, RGBPixel, Block
+from domain import YUVPixel, YUVImage, RGBImage, RGBPixel, Block
 from math import cos, pi
 
 

@@ -14,6 +14,8 @@ The **decoder** does the oposite steps of the encoder in reversed order (Entropy
 
 The JPEG image is kept only in memory during the program execution. At the end, a PPM-3 image is saved as a result of the **decoding**. The result image clearly shows how the quality of an image deteriorates when using JPEG.
 
+Before (left) and after (right) the **encoding** & **decoding** process.
+
 <img src="screenshots/before.jpg" alt="Dog" title="Dog" width="250">
 <img src="screenshots/after.jpg" alt="Dog" title="Dog" width="250">
 
