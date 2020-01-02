@@ -16,8 +16,7 @@ The JPEG image is kept only in memory during the program execution. At the end, 
 
 Before (left) and after (right) the **encoding** & **decoding** process.
 
-<img src="screenshots/before.jpg" alt="Dog" title="Dog" width="250">
-<img src="screenshots/after.jpg" alt="Dog" title="Dog" width="250">
+<img src="screenshots/before.jpg" alt="Dog" title="Dog" width="250"> <img src="screenshots/after.jpg" alt="Dog" title="Dog" width="250">
 
 ## How to run
 
