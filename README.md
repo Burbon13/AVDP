@@ -22,7 +22,7 @@ Before (left) and after (right) the **encoding** & **decoding** process.
 
 Open a terminal inside the `src` folder and just execute the following command:
 
-`python ./src/main.py`
+`python main.py`
 
 The decoded image will be saved in `/res/images/processing/decoded_rgb.ppm`.
 
